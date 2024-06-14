@@ -1,0 +1,33 @@
+<!-- dashboard.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Dashboard</title>
+</head>
+<body>
+    <h1>Data Dashboard</h1>
+    <p>Temperature: <span id="temperature">N/A</span> C</p>
+    <p>Humidity: <span id="humidity">N/A</span> %</p>
+    <p>Last Updated: <span id="lastUpdated">N/A</span></p>
+
+    <script>
+        function updateDashboard(temperature, humidity, lastUpdated) {
+            document.getElementById("temperature").innerText = temperature !== null ? temperature : "N/A";
+            document.getElementById("humidity").innerText = humidity !== null ? humidity : "N/A";
+            document.getElementById("lastUpdated").innerText = lastUpdated !== null ? lastUpdated : "N/A";
+        }
+
+        // Periodically update the dashboard every 5 seconds (5000 milliseconds)
+        setInterval(() => {
+            fetch('/dashboardData')
+                .then(response => response.json())
+                .then(data => {
+                    updateDashboard(data.temperature, data.humidity, data.last_updated);
+                })
+                .catch(error => console.error('Error updating dashboard:', error));
+        }, 5000);
+    </script>
+</body>
+</html>
